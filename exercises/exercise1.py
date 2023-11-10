@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import Table, Column, create_engine, MetaData, String, TEXT, INTEGER, Float, DECIMAL
+from sqlalchemy import Table, Column, create_engine, MetaData, String, TEXT, INTEGER, DECIMAL, FLOAT, BIGINT
 
 
 class DataPipeline:
@@ -29,16 +29,16 @@ class DataPipeline:
 
         # Define a table with column and data types
         airports = Table(self.table, metadata,
-                         Column('column_1', INTEGER),
+                         Column('column_1', BIGINT),
                          Column('column_2', String),
                          Column('column_3', String),
                          Column('column_4', String),
                          Column('column_5', String),
                          Column('column_6', String),
-                         Column('column_7', Float),
-                         Column('column_8', Float),
+                         Column('column_7', FLOAT),
+                         Column('column_8', FLOAT),
                          Column('column_9', INTEGER),
-                         Column('column_10',Float),
+                         Column('column_10', FLOAT),
                          Column('column_11', TEXT),
                          Column('column_12', String),
                          Column('geo_punkt', DECIMAL))
@@ -53,7 +53,28 @@ class DataPipeline:
         # df.to_sql(self.table, f'sqlite:///{self.database}', if_exists='replace', index=False, dtype={})
 
         self.connection = self.engine.connect()
+        # columnTypes = {'column_1': INTEGER, 'column_2': String, 'column_3': String, 'column_4': String,
+        #                'column_5': String,
+        #                'column_6': String, 'column_7': Float, 'column_8': Float, 'column_9': INTEGER,
+        #                'column_10': Float,
+        #                'column_11': TEXT, 'column_12': String, 'geo_punkt': DECIMAL}
+
         self.data.to_sql(self.table, self.connection, if_exists='replace', index=False)
+         # ,dtype={'column_1': BIGINT,
+         #                        'column_2': TEXT,
+         #                        'column_3': TEXT,
+         #                        'column_4': TEXT,
+         #                        'column_5': TEXT,
+         #                        'column_6': TEXT,
+         #                        'column_7': FLOAT,
+         #                        'column_8': FLOAT,
+         #                        'column_9': INTEGER,
+         #                        'column_10': FLOAT,
+         #                        'column_11': TEXT,
+         #                        'column_12': TEXT,
+         #                        'geo_punkt': DECIMAL})
+
+
 
         self.connection.close()
 
@@ -65,7 +86,7 @@ class DataPipeline:
             self.load_data()
         else:
             raise FileNotFoundError(f'Failed to load from url {self.data_url}, Check if correct url is provided')
-        print("Success!")
+        print("ETL -- Successfully completed.")
 
 
 if __name__ == '__main__':
