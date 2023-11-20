@@ -1,8 +1,8 @@
 import pandas as pd
 from sqlalchemy import Table, Column, create_engine, MetaData, String, TEXT, INTEGER, DECIMAL, FLOAT, BIGINT
-import csv
 import requests
 import ssl
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -18,44 +18,74 @@ class DataPipeline:
 
     def download_data(self):
         try:
-            self.data = pd.read_csv(self.data_url, sep=";", on_bad_lines='skip', header=0)
+            #  Method 1: PERFECT -- works
+            #  index_col = 0: makes the first Column as the indexer.
+            self.data = pd.read_csv(self.data_url, sep=";", on_bad_lines='skip', header=0, index_col=0)
+
+            # Method 2:
+            # self.data = pd.read_csv(self.data_url, sep=";", on_bad_lines='skip', header=0)
+
+            # self.data.columns.values.tolist() # To see the column names
+
+            return self.data
         except requests.exceptions.HTTPError as errh:
             print("Http Error:", errh)
+            return None
         except requests.exceptions.ConnectionError as errc:
             print("Error Connecting:", errc)
+            return None
         except requests.exceptions.Timeout as errt:
             print("Timeout Error:", errt)
+            return None
         except requests.exceptions.RequestException as e:
             raise SystemExit(e)
-        
-        return self.data
-
-    def download_data_v2(self):
-        with requests.Session() as s:
-            download = s.get(self.data_url)
-
-            decoded_content = download.content.decode('utf-8')
-            cr = csv.reader(decoded_content.splitlines(), delimiter=',')
-            my_list = list(cr)
-
-            # Not tested below
-            # from io import StringIO
-            # text = StringIO(download.content.decode('utf-8'))
-            # df = pd.read_csv(text)
-
-            for row in my_list:
-                print(row)
 
     def transform_data(self):
         if self.table == 'water':
-            # agriculture_df = df.iloc[0:6, :10]
-            # industry_df = df.iloc[6:12, :10]
-            # chemicals_df = df.iloc[12:18, :10]
-            # pharmaceuticals_df = df.iloc[18:24, :10]
-            pass
+            # Method 1 (works):
+            # In this method, indexing is already done (see download_data() method)
+            # Select rows based on ranges: for rows [a:b] *(after comma)* for columns column [:m]
+            # We are selecting rows based on integer locations
+            # agriculture_df = self.data.iloc[0:6, :10] #
+            # industry_df = self.data.iloc[6:12, :10]
+            # chemicals_df = self.data.iloc[12:18, :10]
+            # pharmaceuticals_df = self.data.iloc[18:24, :10]
+
+            # Rename the columns
+            self.data.columns = ["Year", "Chromium", "Copper", "Mercury", "Lead", "Nickel", "Zinc", "OtherNutrients", "Phosphorus"]
+
+            average = self.data["Mercury"].mean()
+            # Explanation: First select all the rows of data of index 'A Agriculture, forestry and fishing':
+            # using method loc(): loc['A Agriculture, forestry and fishing']
+            # Then, select specific column of "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
+            # ["Emissions to water, heavy metals/Mercury compounds like Hg (kg)"]
+            self.data.at['A Agriculture, forestry and fishing', "Mercury"] = average
+
+
+            # Method 2: Form an indexer and then split/select data accordingly
+            #
+            # Step 1: First make a particular column as an indexer using set_index()
+            # here set_index() will works for whole dataset and treat column (header) named
+            # ['Origin-destination'] as an indexer.
+            # self.data.set_index(['Origin-destination'])
+
+            # average = self.data["Emissions to water, heavy metals/Mercury compounds like Hg (kg)"].mean()
+            # Step 2: To select particular rows of the dataset according to an indexer --> use loc
+            # self.data.loc['A Agriculture, forestry and fishing']
+            # self.data.at[
+            #     'A Agriculture, forestry and fishing', "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"] = average
 
         if self.table == 'vegetable':
-            pass
+
+            # Method 2: Form an indexer and then split/select data accordingly
+            # Step 1: Set a column named 'Vegetables' as indexer
+            # self.data.set_index(['Vegetables'])
+
+            # Step 2: Select an indexer named 'Vegetables'
+            # self.data.loc['Vegetables']
+
+            # Rename the columns
+            self.data.columns = ["year", "gross_yield_million_kilogram"]
 
     def establish_database_connection(self):
         self.engine = create_engine(f'sqlite:///{self.database}')
@@ -64,21 +94,21 @@ class DataPipeline:
         # Define a table with column and data types
         if self.table == 'water':
             water = Table(self.table, metadata,
-                               Column('origin', TEXT),
-                               Column('year', INTEGER),
-                               Column('chromic', INTEGER),
-                               Column('copper', INTEGER),
-                               Column('mercury', INTEGER),
-                               Column('lead', INTEGER),
-                               Column('nickel', INTEGER),
-                               Column('zinc', INTEGER),
-                               Column('total_nutrients', BIGINT),
-                               Column('phosphorus', INTEGER))
+                          Column('origin', TEXT),
+                          Column('year', INTEGER),
+                          Column('chromium', INTEGER),
+                          Column('copper', INTEGER),
+                          Column('mercury', INTEGER),
+                          Column('lead', INTEGER),
+                          Column('nickel', INTEGER),
+                          Column('zinc', INTEGER),
+                          Column('other_nutrients', BIGINT),
+                          Column('phosphorus', INTEGER))
 
         if self.table == 'vegetable':
             vegetables = Table(self.table, metadata,
                                Column('generic_vegetables', TEXT),
-                               Column('period', BIGINT),
+                               Column('year', BIGINT),
                                Column('gross_yield_million_kilogram', DECIMAL))
 
         # Create the table in the database
@@ -87,34 +117,36 @@ class DataPipeline:
 
     def load_data(self):
         self.connection = self.engine.connect()
-        self.data.to_sql(self.table, self.connection, if_exists='replace', index=False)
+        self.data.to_sql(self.table, self.connection, if_exists='replace', index=True)
 
         self.connection.close()
 
     def run_pipeline(self):
 
         if self.data_url is not None:
-            self.download_data()
-            self.transform_data()
-            self.establish_database_connection()
-            self.load_data()
+            data = self.download_data()
+
+            if data is not None:
+                self.transform_data()
+                self.establish_database_connection()
+                self.load_data()
+
+                print(f"ETL -- Successfully completed for {self.table}.")
+
+            if data is None:
+                return None
         else:
             raise FileNotFoundError(f'Failed to load from url {self.data_url}, Check if correct url is provided')
-        print(f"ETL -- Successfully completed for {self.table}.")
 
 
 if __name__ == '__main__':
     _database = '../data/data.sqlite'
+
     vegetable_table = 'vegetable'
     water_table = 'water'
 
-    # vegetable_data_url_v2 = "https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=90C91"
-    vegetable_data_url_v3 = "https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=9ADD1" # "https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=9ADCE"
+    vegetable_data_url = "https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=9ADD1"
+    DataPipeline(data_url=vegetable_data_url, table=vegetable_table, database=_database).run_pipeline()
 
-    vegetable_dp = DataPipeline(data_url=vegetable_data_url_v3, table=vegetable_table, database=_database).run_pipeline()
-
-    # water_data_url = "https://opendata.cbs.nl/statline/#/CBS/en/dataset/83605ENG/table?ts=1698675109480"
-    water_data_url_v2 = "https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=9ADCA"
-    # "https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=13C85"
-
-    water_dp = DataPipeline(data_url=water_data_url_v2, table=water_table, database=_database).run_pipeline()
+    water_data_url = "https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=9ADCA"
+    DataPipeline(data_url=water_data_url, table=water_table, database=_database).run_pipeline()

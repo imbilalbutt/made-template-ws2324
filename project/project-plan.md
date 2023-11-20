@@ -24,7 +24,7 @@ the production. This is what I will analyse with project.
 ### Datasource1: Vegetables: Yield and cultivated area per kind (type) of vegetable
 * Metadata URL: https://opendata.cbs.nl/ODataApi/OData/37738ENG/$metadata#Cbs.OData.WebAPI.UntypedDataSet&$select=Vegetables,%20Periodes,%20GrossYield_1 
 * Data URL:  https://opendata.cbs.nl/statline/#/CBS/en/dataset/37738ENG/table
-* CSV Downloadable URL: https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=90C91
+* CSV Downloadable URL: https://opendata.cbs.nl/CsvDownload/csv/37738ENG/TypedDataSet?dl=9ADD1
 * Data Type: CSV
 
 
@@ -48,7 +48,7 @@ The vegetables are broken down as follows:
 ### Datasource2: Environmental accounts; emissions to water 1995 to 2014
 * Metadata URL: https://opendata.cbs.nl/ODataApi/OData/83605ENG/$metadata#Cbs.OData.WebAPI.UntypedDataSet&$select=OriginDestination,%20Periods,%20ChromicCompoundsLikeCr_4,%20CopperCompoundsLikeCu_5,%20MercuryCompoundsLikeHg_6,%20LeadCompoundsLikePb_7,%20NickelCompoundsLikeNi_8,%20ZincCompoundsLikeZn_9,%20TotalNutrientsInEquivalents_10,%20PhosphorusCompoundsLikeP_11 
 * Data URL: https://opendata.cbs.nl/statline/#/CBS/en/dataset/83605ENG/table?ts=1698675109480
-* CSV Downloadable URL: https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=13C85 
+* CSV Downloadable URL: https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=9ADCA  
 * Data Type: CSV
 
 This datset provided information about the origin of emissions to water of nutrients and heavy metals into water. These data are part of the environmental accounts. Direct emissions are emitted directly into the environment. Indirect emissions reach the environment in an indirect way. For example, discharges to the sewer system partly reach the surface water after treatment in wastewater treatment plants.
@@ -66,3 +66,5 @@ A group of metals with a high atomic weight. This concerns, in particular, the m
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
 1. Example Issue [#1]: https://github.com/imbilalbutt/made-template-ws2324/issues/1
+2. Explore Datasources [#2]: https://github.com/imbilalbutt/made-template-ws2324/issues/2
+3. Build an Automated data pipeline [#3]: https://github.com/imbilalbutt/made-template-ws2324/issues/3 
