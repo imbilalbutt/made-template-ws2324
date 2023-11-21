@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import Table, Column, create_engine, MetaData, String, TEXT, INTEGER, DECIMAL, FLOAT, BIGINT
+from sqlalchemy import Table, Column, create_engine, MetaData, String, TEXT, INTEGER, DECIMAL, FLOAT, BIGINT, inspect
 import requests
 import ssl
 
@@ -9,6 +9,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 class DataPipeline:
 
     def __init__(self, data_url, table, database):
+        self.inspector = None
         self.data_url = data_url
         self.data = None
         self.connection = None
@@ -28,7 +29,7 @@ class DataPipeline:
 
             # self.data.columns.values.tolist() # To see the column names
             return self.data
-        
+
         except requests.exceptions.HTTPError as errh:
             print("Http Error:", errh)
             return None
@@ -93,30 +94,43 @@ class DataPipeline:
     def establish_database_connection(self):
         self.engine = create_engine(f'sqlite:///{self.database}')
         metadata = MetaData()
+        self.inspector = inspect(self.engine)
 
         # Define a table with column and data types
         if self.table == 'water':
-            water = Table(self.table, metadata,
-                          Column('origin', TEXT),
-                          Column('year', INTEGER),
-                          Column('chromium', INTEGER),
-                          Column('copper', INTEGER),
-                          Column('mercury', INTEGER),
-                          Column('lead', INTEGER),
-                          Column('nickel', INTEGER),
-                          Column('zinc', INTEGER),
-                          Column('other_nutrients', BIGINT),
-                          Column('phosphorus', INTEGER))
+            # Method 1: Deprecated --> works
+            # if not self.engine.has_table(self.table):
+
+            # Method 2: --> works
+            if not self.inspector.has_table(self.table):
+                water = Table(self.table, metadata,
+                              Column('origin', TEXT),
+                              Column('year', INTEGER),
+                              Column('chromium', INTEGER),
+                              Column('copper', INTEGER),
+                              Column('mercury', INTEGER),
+                              Column('lead', INTEGER),
+                              Column('nickel', INTEGER),
+                              Column('zinc', INTEGER),
+                              Column('other_nutrients', BIGINT),
+                              Column('phosphorus', INTEGER))
+
+                # Create the table in the database
+                metadata.create_all(self.engine)
 
         if self.table == 'vegetable':
-            vegetables = Table(self.table, metadata,
-                               Column('generic_vegetables', TEXT),
-                               Column('year', BIGINT),
-                               Column('gross_yield_million_kilogram', DECIMAL))
+            # Method 1: Deprecated --> works
+            # if not self.engine.has_table(self.table):
 
-        # Create the table in the database
-        if self.table is not None:
-            metadata.create_all(self.engine)
+            # Method 2: --> works
+            if not self.inspector.has_table(self.table):
+                vegetables = Table(self.table, metadata,
+                                   Column('generic_vegetables', TEXT),
+                                   Column('year', BIGINT),
+                                   Column('gross_yield_million_kilogram', DECIMAL))
+
+                # Create the table in the database
+                metadata.create_all(self.engine)
 
     def load_data(self):
         self.connection = self.engine.connect()
@@ -143,14 +157,14 @@ class DataPipeline:
             raise FileNotFoundError(f'Failed to load from url {self.data_url}, Check if correct url is provided')
 
     def get_all_data_from_database(self, table_name):
-        connection = self.get_connection()
-        dataframe = pd.read_sql_table(table_name.upper(), connection)
-
+        dataframe = pd.read_sql_table(table_name.lower(), self.get_connection())
+        # print(dataframe)
         return dataframe
 
     def get_connection(self):
 
         # Method 1:
+        # # Access the DB Engine
         self.engine = create_engine(f'sqlite:///{self.database}')
         self.connection = self.engine.connect()
 
@@ -174,4 +188,5 @@ if __name__ == '__main__':
     DataPipeline(data_url=water_data_url, table=water_table, database=_database).run_pipeline()
 
     # To query data from database
-    # DataPipeline(data_url=water_data_url, table=water_table, database=_database).get_all_data_from_database(table_name=water_table)
+    DataPipeline(data_url=water_data_url, table=water_table, database=_database).get_all_data_from_database(table_name=water_table)
+    DataPipeline(data_url=water_data_url, table=vegetable_table, database=_database).get_all_data_from_database(table_name=vegetable_table)
