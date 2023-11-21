@@ -54,17 +54,28 @@ class DataPipeline:
             # chemicals_df = self.data.iloc[12:18, :10]
             # pharmaceuticals_df = self.data.iloc[18:24, :10]
 
-            # Rename the columns
+            # Rename each columns
             # Example: Change from "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
             # to "Mercury"
             self.data.columns = ["Year", "Chromium", "Copper", "Mercury", "Lead", "Nickel", "Zinc", "OtherNutrients",
                                  "Phosphorus"]
+            # Rename the header of indexer-column
+            self.data.index.name = "Origin"
 
+            # Rename each value of indexer
+            self.data = self.data.rename(index={'A Agriculture, forestry and fishing': 'Agriculture',
+                                                'B-E Industry (no construction), energy': 'Industrial',
+                                                '20 Manufacture of chemicals': 'Chemical Manufacturing',
+                                                '21 Manufacture of pharmaceuticals': 'Pharmaceuticals Manufacturing'
+                                                }
+                                         )
+            # Get the average value of column named 'Mercury'
             average = self.data["Mercury"].mean()
+
             # Explanation: First select all the rows of data of index 'A Agriculture, forestry and fishing':
             # using method loc(): loc['A Agriculture, forestry and fishing']
             # Then, select specific column of "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
-            # ["Emissions to water, heavy metals/Mercury compounds like Hg (kg)"]
+            # ,"Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
             self.data.at['A Agriculture, forestry and fishing', "Mercury"] = average
 
             # Method 2: Form an indexer and then split/select data accordingly
@@ -188,5 +199,7 @@ if __name__ == '__main__':
     DataPipeline(data_url=water_data_url, table=water_table, database=_database).run_pipeline()
 
     # To query data from database
-    DataPipeline(data_url=water_data_url, table=water_table, database=_database).get_all_data_from_database(table_name=water_table)
-    DataPipeline(data_url=water_data_url, table=vegetable_table, database=_database).get_all_data_from_database(table_name=vegetable_table)
+    water_df = DataPipeline(data_url=water_data_url, table=water_table, database=_database).get_all_data_from_database(table_name=water_table)
+    # print(water_df)
+    vegetable_df =DataPipeline(data_url=water_data_url, table=vegetable_table, database=_database).get_all_data_from_database(table_name=vegetable_table)
+    # print(vegetable_df)
