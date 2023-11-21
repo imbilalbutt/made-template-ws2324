@@ -15,6 +15,7 @@ class DataPipeline:
         self.table = table
         self.database = database
         self.engine = None
+        self.cursor = None
 
     def download_data(self):
         try:
@@ -26,8 +27,8 @@ class DataPipeline:
             # self.data = pd.read_csv(self.data_url, sep=";", on_bad_lines='skip', header=0)
 
             # self.data.columns.values.tolist() # To see the column names
-
             return self.data
+        
         except requests.exceptions.HTTPError as errh:
             print("Http Error:", errh)
             return None
@@ -39,6 +40,7 @@ class DataPipeline:
             return None
         except requests.exceptions.RequestException as e:
             raise SystemExit(e)
+
 
     def transform_data(self):
         if self.table == 'water':
@@ -52,7 +54,10 @@ class DataPipeline:
             # pharmaceuticals_df = self.data.iloc[18:24, :10]
 
             # Rename the columns
-            self.data.columns = ["Year", "Chromium", "Copper", "Mercury", "Lead", "Nickel", "Zinc", "OtherNutrients", "Phosphorus"]
+            # Example: Change from "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
+            # to "Mercury"
+            self.data.columns = ["Year", "Chromium", "Copper", "Mercury", "Lead", "Nickel", "Zinc", "OtherNutrients",
+                                 "Phosphorus"]
 
             average = self.data["Mercury"].mean()
             # Explanation: First select all the rows of data of index 'A Agriculture, forestry and fishing':
@@ -60,7 +65,6 @@ class DataPipeline:
             # Then, select specific column of "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"
             # ["Emissions to water, heavy metals/Mercury compounds like Hg (kg)"]
             self.data.at['A Agriculture, forestry and fishing', "Mercury"] = average
-
 
             # Method 2: Form an indexer and then split/select data accordingly
             #
@@ -76,7 +80,6 @@ class DataPipeline:
             #     'A Agriculture, forestry and fishing', "Emissions to water, heavy metals/Mercury compounds like Hg (kg)"] = average
 
         if self.table == 'vegetable':
-
             # Method 2: Form an indexer and then split/select data accordingly
             # Step 1: Set a column named 'Vegetables' as indexer
             # self.data.set_index(['Vegetables'])
@@ -130,6 +133,7 @@ class DataPipeline:
                 self.transform_data()
                 self.establish_database_connection()
                 self.load_data()
+                # self.get_all_data_from_database(self.table)
 
                 print(f"ETL -- Successfully completed for {self.table}.")
 
@@ -137,6 +141,24 @@ class DataPipeline:
                 return None
         else:
             raise FileNotFoundError(f'Failed to load from url {self.data_url}, Check if correct url is provided')
+
+    def get_all_data_from_database(self, table_name):
+        connection = self.get_connection()
+        dataframe = pd.read_sql_table(table_name.upper(), connection)
+
+        return dataframe
+
+    def get_connection(self):
+
+        # Method 1:
+        self.engine = create_engine(f'sqlite:///{self.database}')
+        self.connection = self.engine.connect()
+
+        # Method 2: Does not work
+        # con = sqlite3.connect("data/portal_mammals.sqlite")
+        # self.connection = sqlite3.connect(self.database)
+
+        return self.connection
 
 
 if __name__ == '__main__':
@@ -150,3 +172,6 @@ if __name__ == '__main__':
 
     water_data_url = "https://opendata.cbs.nl/CsvDownload/csv/83605ENG/TypedDataSet?dl=9ADCA"
     DataPipeline(data_url=water_data_url, table=water_table, database=_database).run_pipeline()
+
+    # To query data from database
+    # DataPipeline(data_url=water_data_url, table=water_table, database=_database).get_all_data_from_database(table_name=water_table)
