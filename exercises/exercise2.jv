@@ -24,7 +24,8 @@ pipeline BahnofPipeline {
 
     // 3. Here, certain column(s) are specified to delete it 
     block BahnofColumnDeleter oftype ColumnDeleter {
-        delete: 'Status';
+        // delete: 'Status';
+        delete: [column J];
     }
 
     // 4. Specify the Headers of the table and define it's builtin or custom data types
@@ -33,7 +34,7 @@ pipeline BahnofPipeline {
         columns: [
             "EVA_NR" oftype integer,
             "DS100" oftype text,
-            "IFOPT" oftype text,
+            "IFOPT" oftype ValidIFOPT,
             "NAME" oftype text,
             "Verkehr" oftype ValidVerkehrCode,
             "Laenge" oftype ValidLaenge,
@@ -62,6 +63,12 @@ pipeline BahnofPipeline {
         ];
     }
 
+    valuetype ValidIFOPT oftype decimal {
+        constraints: [
+            ValidIFOPTFormat,
+        ];
+    }
+
     // 6. Permitted values for custom data types  
     constraint ValidVerkehrCodeList on text:
         value in [
@@ -80,6 +87,10 @@ pipeline BahnofPipeline {
         lowerBoundInclusive: true;
         upperBound: 90;
         upperBoundInclusive: true;
+    }
+
+    constraint ValidIFOPTFormat oftype RegexConstraint {
+        regex: /^(([a-z]|[A-Z]){2}((:{1}\d*:{1}\d*)|(:{1}\d*:{1}\d*:{1}\d*)))$/;
     }
 
     // 7. Load the transformed data in sql table 
