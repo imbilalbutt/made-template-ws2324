@@ -63,7 +63,7 @@ pipeline BahnofPipeline {
         ];
     }
 
-    valuetype ValidIFOPT oftype decimal {
+    valuetype ValidIFOPT oftype text {
         constraints: [
             ValidIFOPTFormat,
         ];
