@@ -1,6 +1,6 @@
 
 pipeline BahnofPipeline {
-    
+
     BahnofHttpExtractor
         ->BahnofTextFileInterpreter
         ->BahnofCSVInterpreter
@@ -9,23 +9,25 @@ pipeline BahnofPipeline {
         ->BahnofLoader;
 
 
+    // 1. Here, we specify the URL where the file shall be downloaded from.
     block BahnofHttpExtractor oftype HttpExtractor {
 
-        // 9. Properties are assigned to concrete values.
-        // Here, we specify the URL where the file shall be downloaded from.
         url: "https://download-data.deutschebahn.com/static/datasets/haltestellen/D_Bahnhof_2020_alle.CSV";
     }
 
     block BahnofTextFileInterpreter oftype TextFileInterpreter {}
 
+    // 2. Here, delimeter is specified to parse the data in accordance with csv 
     block BahnofCSVInterpreter oftype CSVInterpreter {
         delimiter: ";";
     }
 
+    // 3. Here, certain column(s) are specified to delete it 
     block BahnofColumnDeleter oftype ColumnDeleter {
-        delete: ["Status"];
+        delete: 'Status';
     }
 
+    // 4. Specify the Headers of the table and define it's builtin or custom data types
     block BahnofTableInterpreter oftype TableInterpreter {
         header: true;
         columns: [
@@ -36,39 +38,23 @@ pipeline BahnofPipeline {
             "Verkehr" oftype ValidVerkehrCode,
             "Laenge" oftype ValidLaenge,
             "Breite" oftype ValidBreite,
-            "Betreiber_Name" oftype decimal,
+            "Betreiber_Name" oftype text,
             "Betreiber_Nr" oftype integer,
         ];
     }
 
-    block BahnofLoader oftype SQLiteLoader {
-        table: "trainstops";
-        file: "./trainstops.sqlite";
-        dropTable: false;
-    }
-
+    // 5. Defined custom data types  
     valuetype ValidVerkehrCode oftype text {
         constraints: [
             ValidVerkehrCodeList,
         ];
     }
 
-    constraint ValidVerkehrCodeList on text:
-        value in [
-            "FV", "RV", "nur DPN",
-        ];
-
-        valuetype ValidLaenge oftype decimal {
+    valuetype ValidLaenge oftype decimal {
         constraints: [
             ValidLaengeConstraint,
         ];
     }
-
-    constraint ValidLaengeConstraint oftype RangeConstraint {
-            lowerBound: -90;
-             upperBound: 90;
-        }
-
 
     valuetype ValidBreite oftype decimal {
         constraints: [
@@ -76,9 +62,31 @@ pipeline BahnofPipeline {
         ];
     }
 
+    // 6. Permitted values for custom data types  
+    constraint ValidVerkehrCodeList on text:
+        value in [
+            "FV", "RV", "nur DPN",
+        ];
+
+    constraint ValidLaengeConstraint oftype RangeConstraint {
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBound: 90;
+        upperBoundInclusive: true;
+    }
+
     constraint ValidBreiteConstraint oftype RangeConstraint {
-            lowerBound: -90;
-             upperBound: 90;
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBound: 90;
+        upperBoundInclusive: true;
+    }
+
+    // 7. Load the transformed data in sql table 
+    block BahnofLoader oftype SQLiteLoader {
+        table: "trainstops";
+        file: "./trainstops.sqlite";
+        dropTable: false;
     }
 
 
