@@ -42,6 +42,12 @@ class DataPipeline:
         filter_hybrid = self.data["hybrid"] != ""
         self.data = self.data[filter_hybrid]
 
+        filter_plugInHybrid = self.data["plugInHybrid"] != ""
+        self.data = self.data[filter_plugInHybrid]
+
+        filter_others = self.data["others"] != ""
+        self.data = self.data[filter_others]
+
         # filter out for dashes
         filter_petrol = self.data["petrol"] != "-"
         self.data = self.data[filter_petrol]
