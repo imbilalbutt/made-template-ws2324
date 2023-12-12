@@ -8,8 +8,8 @@ class DataPipeline:
         self.data_url = data_url
         self.data = None
         self.connection = None
-        self.table = table  # 'airports'
-        self.database = database  # 'airports.sqlite'
+        self.table = table  # 'cars'
+        self.database = database  # 'cars.sqlite'
         self.engine = None
 
     def download_data_from_url(self):
