@@ -13,13 +13,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: echo The CI/CD is about to begin!
-
+            # Checkout repository
             - name: Checkout
               uses: actions/checkout@v3
               with:
                 path: main
 
-                # Install python
+            # Install python
             - name: Step#1- Setup Python 3.11
               uses: actions/setup-python@v4
               with:
@@ -49,7 +49,6 @@ jobs:
 
         steps:
             - run: echo The Testing process about to begin!
-
             - name: Build python project/pipeline.sh
               run: | 
                 bash project/tests.sh
