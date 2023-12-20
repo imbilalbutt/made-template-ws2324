@@ -36,7 +36,7 @@ jobs:
             - name: Step#4-Build python project/pipeline.sh
               run: | 
                 echo The Build process about to begin!
-                cd ./project
+                cd project
                 bash pipeline.sh
                 echo "Build process completed!"
 
