@@ -1,4 +1,4 @@
-from pipeline import DataPipeline
+from .pipeline import DataPipeline
 import unittest
 
 
