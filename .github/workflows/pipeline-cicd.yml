@@ -33,8 +33,6 @@ jobs:
 
             - name: Grant Access
               run: |
-                cd ..
-                cd ..
                 chmod +x project
 
             - name: Step#4-Build python project/pipeline.sh
