@@ -38,6 +38,7 @@ jobs:
 
             - name: Step#4-Build python project/pipeline.sh
               run: | 
+                pip install requests
                 echo The Build process about to begin!
                 bash ./project/pipeline.sh
                 echo "Build process completed!"
