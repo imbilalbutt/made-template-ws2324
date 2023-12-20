@@ -36,7 +36,7 @@ jobs:
                 chmod +x project/tests.sh
                 chmod +x project/pipeline.py
                 chmod +x project/test_pipeline.py
-                chmod +x data/**
+                chmod +x data/
 
             - name: Step#4-Build python project/pipeline.sh
               run: | 
