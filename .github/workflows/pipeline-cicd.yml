@@ -36,6 +36,9 @@ jobs:
                 if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
                 echo "Environment is set up!"
 
+            - name: Grant Access
+              run: chmod +x ./project
+
             - name: Step#4-Build python project/pipeline.sh
               run: | 
                 echo The Build process about to begin!
@@ -45,5 +48,5 @@ jobs:
             - run: echo The Testing process about to begin!
             - name: Step#4-Build python project/pipeline.sh
               run: | 
-                bash tests.sh
+                bash ./project/tests.sh
                 echo "Testing process completed!"
