@@ -1,3 +1,3 @@
 #!/bin/bash
 #! Test comment to trigger cicd-1234
-python3 ./pipeline.py
+python3 /project/pipeline.py
