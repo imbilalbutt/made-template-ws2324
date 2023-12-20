@@ -38,12 +38,6 @@ jobs:
                 chmod +x project/test_pipeline.py
                 chmod +x data/
 
-            - name: Step#4-Build python project/pipeline.sh
-              run: | 
-                echo The Build process about to begin!
-                ./project/pipeline.sh
-                echo "Build process completed!"
-
             - run: echo The Testing process about to begin!
             - name: Step#4-Build python project/pipeline.sh
               run: | 
