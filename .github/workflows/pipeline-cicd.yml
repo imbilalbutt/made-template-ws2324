@@ -38,9 +38,8 @@ jobs:
                 echo The Build process about to begin!
                 pwd
                 cd ..
-                cd ..
                 pwd
-                ./project/pipeline.sh
+                bash ./project/pipeline.sh
 
                 echo "Build process completed!"
 
