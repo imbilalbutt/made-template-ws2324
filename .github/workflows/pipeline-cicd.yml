@@ -4,11 +4,6 @@ on:
     push:
       branches:
       - main
-      paths:
-      - project/**
-
-permissions:
-    contents: read
 
 #  Here, three jobs have been created, and their job_id values are job1_setup_environment, job2_build and job3_test.
 jobs:
@@ -38,6 +33,7 @@ jobs:
 
             - name: Grant Access
               run: |
+                cd ..
                 cd ..
                 chmod +x project
 
