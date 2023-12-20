@@ -15,8 +15,6 @@ jobs:
             # Checkout repository
             - name: Step#1- Checkout
               uses: actions/checkout@v3
-              with:
-                path: main
 
             # Install python
             - name: Step#2- Setup Python 3.10
