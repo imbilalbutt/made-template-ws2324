@@ -37,6 +37,7 @@ jobs:
               run: | 
                 echo The Build process about to begin!
                 pwd
+                bash ls
                 cd project
                 bash pipeline.sh
                 echo "Build process completed!"
