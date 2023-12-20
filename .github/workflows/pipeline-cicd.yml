@@ -37,11 +37,11 @@ jobs:
             - name: Step#4-Build python project/pipeline.sh
               run: | 
                 echo The Build process about to begin!
-                ./project/pipeline.sh
+                bash ./project/pipeline.sh
                 echo "Build process completed!"
 
             - run: echo The Testing process about to begin!
             - name: Step#4-Build python project/pipeline.sh
               run: | 
-                ./project/tests.sh
+                bash ./project/tests.sh
                 echo "Testing process completed!"

@@ -1,3 +1,3 @@
 #!/bin/bash
-#! Test comment to trigger cicd-123345
+#! Test comment to trigger cicd-12
 python3 pipeline.py
