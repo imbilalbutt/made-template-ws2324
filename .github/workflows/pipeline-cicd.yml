@@ -40,11 +40,11 @@ jobs:
               run: | 
                 pip install requests
                 echo The Build process about to begin!
-                bash ./project/pipeline.sh
+                ./project/pipeline.sh
                 echo "Build process completed!"
 
             - run: echo The Testing process about to begin!
             - name: Step#4-Build python project/pipeline.sh
               run: | 
-                bash ./project/tests.sh
+                ./project/tests.sh
                 echo "Testing process completed!"
