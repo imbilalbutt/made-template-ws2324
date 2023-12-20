@@ -23,7 +23,7 @@ jobs:
             - name: Step#2- Setup Python 3.10
               uses: actions/setup-python@v3
               with:
-                python-version: '3.11'
+                python-version: '3.10'
 
             # Install dependencies
             - name: Step#3- Install dependencies
@@ -40,7 +40,8 @@ jobs:
             - name: Build python project/pipeline.sh
               run: | 
                 echo The Build process about to begin!
-                bash project/pipeline.sh
+                cd project
+                bash pipeline.sh
                 echo "Build process completed!"
 
     job3_test:
@@ -51,5 +52,5 @@ jobs:
             - run: echo The Testing process about to begin!
             - name: Build python project/pipeline.sh
               run: | 
-                bash project/tests.sh
+                bash tests.sh
                 echo "Testing process completed!"
