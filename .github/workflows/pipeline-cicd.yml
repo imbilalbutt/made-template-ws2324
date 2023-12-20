@@ -39,11 +39,7 @@ jobs:
             - name: Step#4-Build python project/pipeline.sh
               run: | 
                 echo The Build process about to begin!
-                pwd
-                cd ..
-                pwd
                 bash ./project/pipeline.sh
-
                 echo "Build process completed!"
 
             - run: echo The Testing process about to begin!
