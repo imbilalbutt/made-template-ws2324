@@ -13,6 +13,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: echo The CI/CD is about to begin!
+            - run: pwd
+            - run: ls
             # Checkout repository
             - name: Step#1- Checkout
               uses: actions/checkout@v3
