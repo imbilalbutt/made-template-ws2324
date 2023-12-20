@@ -37,7 +37,8 @@ jobs:
                 echo "Environment is set up!"
 
             - name: Grant Access
-              run: chmod +x ./project
+              run: |
+                chmod +x project
 
             - name: Step#4-Build python project/pipeline.sh
               run: | 
