@@ -9,7 +9,7 @@ on:
 
 #  Here, three jobs have been created, and their job_id values are job1_setup_environment, job2_build and job3_test.
 jobs:
-    job1_setup_environment:
+    job1_build_test:
         runs-on: ubuntu-latest
         steps:
             - run: echo The CI/CD is about to begin!
@@ -37,9 +37,9 @@ jobs:
               run: | 
                 echo The Build process about to begin!
                 pwd
-                bash ls
-                cd project
-                bash pipeline.sh
+                cd ..
+                ./project/pipeline.sh
+
                 echo "Build process completed!"
 
             - run: echo The Testing process about to begin!
