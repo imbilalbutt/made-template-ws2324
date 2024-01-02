@@ -94,7 +94,7 @@ class DataPipeline:
         if self.table == 'vegetable':
             # Method 2: Form an indexer and then split/select data accordingly
             # Step 1: Set a column named 'Vegetables' as indexer
-            # self.data.set_index(['Vegetables'])
+            # self.data.set_index([''])
 
             # Step 2: Select an indexer named 'Vegetables'
             # self.data.loc['Vegetables']
