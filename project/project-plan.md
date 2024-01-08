@@ -65,6 +65,9 @@ A group of metals with a high atomic weight. This concerns, in particular, the m
 
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
-1. Missing data [#1]: https://github.com/imbilalbutt/made-template-ws2324/issues/1
-2. Explore Datasources [#2]: https://github.com/imbilalbutt/made-template-ws2324/issues/2
-3. Build an Automated data pipeline [#3]: https://github.com/imbilalbutt/made-template-ws2324/issues/3 
+1. Missing data : https://github.com/imbilalbutt/made-template-ws2324/issues/1
+2. Explore Datasources : https://github.com/imbilalbutt/made-template-ws2324/issues/2
+3. Build an Automated data pipeline: https://github.com/imbilalbutt/made-template-ws2324/issues/3 
+4. Reporting results #4Reporting results:https://github.com/imbilalbutt/made-template-ws2324/issues/4
+5. Test cases for pipeline: https://github.com/imbilalbutt/made-template-ws2324/issues/5
+6. Automate pipeline: https://github.com/imbilalbutt/made-template-ws2324/issues/6 
