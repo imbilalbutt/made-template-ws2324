@@ -1,18 +1,7 @@
 # Exercises
 
--   Place all exercise submissions into the folder named “exercises” in your GitHub repository
-    
-
--   Name exercise submissions either “exercise<number>.jv” or “exercise<number>.py”
-    
-
--   For example, if you are in the group using Jayvee for exercise 1, you must submit the following file: /exercises/exercise1.jv, if you have to use Python, submit /exercises/exercise1.py
-    
-
--   We will grade the version of the exercise that is in your public GitHub repository at the deadline (!)
-    
--   Group Assignments: [https://www.studon.fau.de/file5494216_download.html](https://www.studon.fau.de/file5494216_download.html)
-    
+During the course there were also five exercises given to work on. All of them required to build a datapipeline based on a given task and a given dataset. The exercises should be solved alternately [Python](https://www.python.org/) and [Jayvee](https://github.com/jvalue/jayvee).  
+Automated Feedback to the exercises was provided using a GitHub action, which is defined in `.github/workflows/exercise-feedback.yml`
 
 ## Exercise 1
 
