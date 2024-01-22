@@ -59,7 +59,7 @@ pipeline TemperaturePipeline {
             "Monat" oftype integer,
             "Temperatur" oftype decimal,
             "Batterietemperatur" oftype decimal,
-            "GeraetAktiv" oftype geraetStatus
+            "Geraet aktiv" oftype geraetStatus
         ];
     }
 
