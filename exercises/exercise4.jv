@@ -63,7 +63,7 @@ pipeline TemperaturePipeline {
         ];
     }
 
-    
+    // 5. Define constraints
     block CelsiusToFahrenheitTemperatur oftype TableTransformer {
         inputColumns: ['Temperatur'];
         outputColumn: 'Temperatur';
@@ -101,12 +101,10 @@ pipeline TemperaturePipeline {
             "Ja", "Nein"
         ];
     
-
+    // 6. Load the data in sql table 
     block TemperatureLoader oftype SQLiteLoader {
         table: "temperatures";
         file: "./temperatures.sqlite";
     }
-
-
 
 }
