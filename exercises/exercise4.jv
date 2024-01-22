@@ -24,7 +24,7 @@ pipeline TemperaturePipeline {
     }
 
     block TemperatureFilePicker oftype FilePicker { 
-        path: "/data.txt";
+        path: "/data.csv";
     }
     
     block TemperatureTextInterpreter oftype TextFileInterpreter {}
@@ -104,7 +104,7 @@ pipeline TemperaturePipeline {
 
     block TemperatureLoader oftype SQLiteLoader {
         table: "temperature";
-        file: "./temperature.sqlite";
+        file: "./temperatures.sqlite";
     }
 
 
