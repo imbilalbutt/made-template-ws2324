@@ -1,25 +1,21 @@
+pipeline TemperaturePipeline {
 
+    TemperatureFileDownloader -> ZipArchiveInterpreter;
 
-transform CelsiusToKelvin {
-  from tempCelsius oftype decimal;
-  to tempKelvin oftype decimal;
-
-  tempKelvin: tempCelsius + 273.15;
-}
-
-pipeline Temperature {
-
-    TemperatureDownloader
-    -> ZipArchiveInterpreter
-    ->DataPicker
-    ->TextInterpreter
-    ->CSVInterpreter
+    ZipArchiveInterpreter
+    -> TemperatureFilePicker
+    -> TemperatureTextInterpreter
+    -> TemperatureCSVInterpreter
+    -> RenameTemperaturCellWriter
+    -> RenameTemperaturBatteryCellWriter
     -> TemperatureColumnDeleter
     -> TemperatureTableInterpreter
+    -> CelsiusToFahrenheitTemperatur
+    -> CelsiusToFahrenheitBatterietemperatur
     -> TemperatureLoader;
 
-    // 3. As a first step, we download the zip file and interpret it.
-    block TemperatureDownloader oftype HttpExtractor {
+    // 1. As a first step, we download the zip file and interpret it.
+    block TemperatureFileDownloader oftype HttpExtractor {
         url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
     }
 
@@ -27,12 +23,89 @@ pipeline Temperature {
         archiveType: "zip";
     }
 
-    block DataPicker oftype FilePicker { path: "/ex4-data.csv";}
+    block TemperatureFilePicker oftype FilePicker { 
+        path: "/data.txt";
+    }
     
-    block CSVInterpreter oftype CSVInterpreter {delimiter: ";"; }
+    block TemperatureTextInterpreter oftype TextFileInterpreter {}
+
+    block TemperatureCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+    }
+
+    // 2. Rename the two headers.
+    block RenameTemperaturCellWriter oftype CellWriter {
+        at: cell E1;
+        write: ["Temperatur"]; 
+    }
+
+    block RenameTemperaturBatteryCellWriter oftype CellWriter {
+        at: cell J1;
+        write: ["Batterietemperatur"]; 
+    }
+
+    // 3. Delete uncessary columns
+    block TemperatureColumnDeleter oftype ColumnDeleter {
+        delete: [column F, column G, column H, column I];
+    }
     
-    block TextInterpreter oftype TextFileInterpreter {}
+    // 4. Define the table
+    block TemperatureTableInterpreter oftype TableInterpreter    {
+        header: false;
+        columns: [
+            "Geraet" oftype validGeraet,
+            "Hersteller" oftype text,
+            "Model" oftype text,
+            "Monat" oftype integer,
+            "Temperatur" oftype decimal,
+            "Batterietemperatur" oftype decimal,
+            "GeraetAktiv" oftype geraetStatus
+        ];
+    }
+
     
+    block CelsiusToFahrenheitTemperatur oftype TableTransformer {
+        inputColumns: ['Temperatur'];
+        outputColumn: 'Temperatur';
+        use: CelsiusToFahrenheit;
+    }
+
+    block CelsiusToFahrenheitBatterietemperatur oftype TableTransformer {
+        inputColumns: ['Batterietemperatur'];
+        outputColumn: 'Batterietemperatur';
+        use: CelsiusToFahrenheit;
+    }
+
+    transform CelsiusToFahrenheit {
+        from tempCelsius oftype decimal;
+        to tempFahrenheit oftype decimal;
+
+        tempFahrenheit: (tempCelsius * 9/5) + 32; 
+    }
+
+    valuetype validGeraet oftype integer {
+        constraints: [ validGeraetConstraint ];
+    } 
+
+    constraint validGeraetConstraint on decimal: 
+        value > 0; 
+
+    valuetype geraetStatus oftype text {
+        constraints: [
+            geraetStatusList,
+        ];
+    }
+
+    constraint geraetStatusList on text:
+        value in [
+            "Ja", "Nein"
+        ];
+    
+
+    block TemperatureLoader oftype SQLiteLoader {
+        table: "temperature";
+        file: "./temperature.sqlite";
+    }
 
 
 
