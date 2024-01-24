@@ -60,16 +60,9 @@ if __name__ == '__main__':
     stops_df = pd.read_csv("./output_dir/" + stops_filename, usecols=stops_columns, encoding='utf-8')
 
     # Filtering data
-    stops_df = stops_df[stops_df["zone_id"] == 2001]
-
-    stops_df = stops_df[(stops_df['stop_lat'] >= -90) & (stops_df['stop_lat'] <= 90)]
-    stops_df = stops_df[(stops_df['stop_lon'] >= -90) & (stops_df['stop_lon'] <= 90)]
-
-    stops_df = stops_df.dropna(axis=0)
-
-    # stops_df = validate_dataframe(stops_df)
+    stops_df = validate_dataframe(stops_df)
 
     engine = establish_connection(_database)
     load_data_in_database(engine, _table, stops_df)
 
-
+    print("ETL -- Successfully completed.")
