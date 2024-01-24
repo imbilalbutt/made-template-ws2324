@@ -56,7 +56,7 @@ pipeline TemperaturePipeline {
             "Geraet" oftype validGeraet,
             "Hersteller" oftype text,
             "Model" oftype text,
-            "Monat" oftype integer,
+            "Monat" oftype ValidMonat,
             "Temperatur" oftype decimal,
             "Batterietemperatur" oftype decimal,
             "Geraet aktiv" oftype geraetStatus
@@ -94,6 +94,19 @@ pipeline TemperaturePipeline {
         constraints: [
             geraetStatusList,
         ];
+    }
+
+    valuetype ValidMonat oftype integer {
+        constraints: [
+            ValidMonatConstraint,
+        ];
+    }
+
+    constraint ValidMonatConstraint oftype RangeConstraint {
+        lowerBound: 0;
+        lowerBoundInclusive: true;
+        upperBound: 12;
+        upperBoundInclusive: true;
     }
 
     constraint geraetStatusList on text:
