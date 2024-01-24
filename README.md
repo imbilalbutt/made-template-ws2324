@@ -11,6 +11,10 @@ This projects tries to realize the trend and relationship of different vegetable
 
 > **Important:** [Powerpoint presentation](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/pipeline.py) has been recorded by me in the [video](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/pipeline.py).
 
+<img src="https://unsplash.com/photos/assorted-fruits-at-the-market--gOUx23DNks"
+     alt="Markdown Monster icon"
+     style="float: left; margin-right: 10px;" />
+
 ## Datasets
 
 For this project two datasets from CBS Open data StatLine have been used. This data repository is Netherlands statistics database. This database offers a wealth of data on the Dutch economy and society.
