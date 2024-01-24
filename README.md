@@ -2,9 +2,11 @@
 
 <img  src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="float: left; margin-right: 10px;"  />
 
-This code repository contains exercises and a project developed during the course **Methods of Advanced Data Engineering** in winter semester 2023/24 of the MSc. Data Science at FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg). Herewith, published the automated data pipeline which download the data from specified URL, transform data, and connects with database to load the data in it using different programming tools such python and jayvee (FAU home-made tool).
+This code repository contains exercises and a project developed during the course **Methods of Advanced Data Engineering** in winter semester 2023/24 of the MSc. Data Science at FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg). Herewith, published the automated data pipeline which download the data from official open source data repository in Netherlands. Then, pipeline transforms the data, and establishes a connection with database in order to load transformed data in it.
 
-**[Exercises](https://github.com/imbilalbutt/made-template-ws2324/tree/main/exercises):** Each exercise contains a different URL and implementation of different tasks involved in data pipeline.
+**[Exercises](https://github.com/imbilalbutt/made-template-ws2324/tree/main/exercises):** Each exercise contains a different URL and implementation of different tasks involved in data pipeline. Data pipelines are construected using different programming tools such python and jayvee (FAU home-made tool).
+
+
 **[Project](https://github.com/imbilalbutt/made-template-ws2324/tree/main/project):**  A data engineering based project to understand the relationship of crops and water in a european country The Netherlands from year 2000-2015.
 
 ## Description of project
