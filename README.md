@@ -1,5 +1,7 @@
 # `Trends of crop yield in the Netherlands with respect to emission in water`
 
+<img  src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="float: left; margin-right: 10px;"  />
+
 This code repository contains exercises and a project developed during the course **Methods of Advanced Data Engineering** in winter semester 2023/24 of the MSc. Data Science at FAU (Friedrich-Alexander-Universität Erlangen-Nürnberg). Herewith, published the automated data pipeline which download the data from specified URL, transform data, and connects with database to load the data in it using different programming tools such python and jayvee (FAU home-made tool).
 
 **[Exercises](https://github.com/imbilalbutt/made-template-ws2324/tree/main/exercises):** Each exercise contains a different URL and implementation of different tasks involved in data pipeline.
@@ -11,7 +13,7 @@ This projects tries to realize the trend and relationship of different vegetable
 
 > **Important:** [PDF slides](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/slides.pdf) has been recorded by me in the [video](https://drive.google.com/file/d/1dcu1qkknQE8QwfH1KnhBmP63n8AAjfFO/view?usp=sharing).
 
-<img  src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="float: left; margin-right: 10px;"  />
+
 
 ## Datasets
 
