@@ -9,11 +9,9 @@ This code repository contains exercises and a project developed during the cours
 
 This projects tries to realize the trend and relationship of different vegetables yield with respect to the different compounds present in the water, which may be emitted from different factors such as Industrial, Chemical manufacturing and Pharmaceuticals manufacturing waste which are included in [report.ipynb](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/report.ipynb) using practices of advance data engineering (ie: automated data pipeline, test cases etc.).  It is important to note that above mentioned factors not only emit hard-elemenal compunds which are strictly damaging for the crop yield but also some nutrients like phospours and nitrogen based compounds are also emitted. Though, nutrients are good for crops but their excess can also lead to minimized yield also. Thus, the hypothesis that is analysed and confirmed in the report is: **With the decrease in heavy elements and nutrients; the yield of different vegetables will increase.** 
 
-> **Important:** [Powerpoint presentation](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/pipeline.py) has been recorded by me in the [video](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/pipeline.py).
+> **Important:** [PDF slides](https://github.com/imbilalbutt/made-template-ws2324/blob/main/project/slides.pdf) has been recorded by me in the [video](https://drive.google.com/file/d/1dcu1qkknQE8QwfH1KnhBmP63n8AAjfFO/view?usp=sharing).
 
-<img src="https://unsplash.com/photos/assorted-fruits-at-the-market--gOUx23DNks"
-     alt="Markdown Monster icon"
-     style="float: left; margin-right: 10px;" />
+<img  src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="float: left; margin-right: 10px;"  />
 
 ## Datasets
 
