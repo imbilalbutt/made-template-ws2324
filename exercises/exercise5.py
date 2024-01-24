@@ -27,10 +27,10 @@ def establish_connection(database):
     metadata.create_all(engine)
     return engine
 
-def load_data_in_database(table, engine):
+def load_data_in_database(engine, table, dataframe):
     connection = engine.connect()
 
-    pd.to_sql(table, connection, if_exists='replace', index=False)
+    dataframe.to_sql(table, connection, if_exists='replace', index=False)
 
     connection.close()
 
@@ -70,6 +70,6 @@ if __name__ == '__main__':
     # stops_df = validate_dataframe(stops_df)
 
     engine = establish_connection(_database)
-    load_data_in_database(_table, engine)
+    load_data_in_database(engine, _table, stops_df)
 
 
