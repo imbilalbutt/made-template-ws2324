@@ -155,3 +155,37 @@ Goal
     
 -   Write data into a SQLite database called “temperatures.sqlite”, in the table “temperatures”
     
+
+## Exercise 5
+    
+-   Build an automated data pipeline for the following source:
+    
+-   Direct download link: https://gtfs.rhoenenergie-bus.de/GTFS.zip
+    
+ Goal
+    
+-   Work with GTFS data
+    
+for Python, consider using ‘urllib.request.urlretrieve’ instead of the request library to download the ZIP file
+for Jayvee, if you use the FilePicker, do not use a leading dot in file paths, see this bug: https://github.com/jvalue/jayvee/issues/381
+    
+-   Pick out only stops (from stops.txt)
+    
+-   Only the columns stop_id, stop_name, stop_lat, stop_lon, zone_id with fitting data types
+    
+-   Filter data
+    
+-   Only keep stops from zone 2001
+    
+-   Validate data
+    
+-   stop_name can be any text but must maintain german umlauts
+    
+-   stop_lat/stop_lon must be a geographic coordinates between -90 and 90, including upper/lower bounds
+    
+-   Drop rows containing invalid data
+    
+-   Use fitting SQLite types (e.g., BIGINT, TEXT or FLOAT) for all columns
+    
+-   Write data into a SQLite database called “gtfs.sqlite”, in the table “stops”
+    
